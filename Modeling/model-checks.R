@@ -302,9 +302,9 @@ for(i in 1:10){
   for(j in 1:10){
     if(j > i){
       for(p in 1:37){
-        ## Subtract off obs data
+        ## Ratio to obs data
         y_star[,i,j,p] <- rgamma(15000, shape = psi.tempo, 
-                                 rate = psi.tempo/(tau.tempo[,p]*delta.tempo[,i,j])) - D[i,j,p]
+                                 rate = psi.tempo/(tau.tempo[,p]*delta.tempo[,i,j]))/D[i,j,p]
       }
     }
   }
@@ -318,13 +318,16 @@ for(i in 1:10){
   for(j in 1:10){
     if(j > i){
       for(p in 1:37){
-        if(q25[i,j,p] <0 & q975[i,j,p] > 0){
+        if(q25[i,j,p] <1 & q975[i,j,p] > 1){
           count <- count + 1
         }
       }
     }
   }
 }
+## Coverage
+count/(45*37)
+
 
 ### Posterior pred for one pair across all pieces
 post.pred <- data.frame(y_star[,1,10,])
@@ -336,29 +339,12 @@ plot.df$Symphony <- c(rep("No1", 15000*4), rep("No2", 15000*4), rep("No3", 15000
 
 ggplot(plot.df, aes(x = variable, y = value, fill = Symphony)) +
   geom_boxplot() + 
-  geom_hline(aes(yintercept = 0), color = 'navy') +
+  geom_hline(aes(yintercept = 1), color = 'navy') +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
-  labs(y = TeX("$\\e_{ijp}$"), x = "Piece") +
+  labs(y = TeX("$\\r_{ijp}$"), x = "Piece") +
   theme(text = element_text(size=16)) 
 
-## Posterior pred few pieces all pairs
-post.pred <- data.frame(y_star[,1,2:10,34])
-colnames(post.pred) <- dimnames(hellinger.dist)[[1]][2:10]
-ggplot(melt(post.pred), aes(x = variable, y = value, fill = variable)) +
-  geom_boxplot() + 
-  geom_hline(aes(yintercept = 0)) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
-  labs(y = TeX("$\\y^*_{ijp}$"), x = '') +
-  theme(legend.position = "none")
 
-post.pred <- data.frame(y_star[,1,2:10,1])
-colnames(post.pred) <- dimnames(hellinger.dist)[[1]][2:10]
-ggplot(melt(post.pred), aes(x = variable, y = value, fill = variable)) +
-  geom_boxplot() + 
-  geom_hline(aes(yintercept = 0)) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
-  labs(y = TeX("$\\y^*_{ijp}$"), x = '') +
-  theme(legend.position = "none")
 
 
 ## Volume/Dynamics - Sampling Model
@@ -370,9 +356,9 @@ for(i in 1:10){
   for(j in 1:10){
     if(j > i){
       for(p in 1:37){
-        ## Subtract off obs data
+        ## Ratio to obs data
         y_star[,i,j,p] <- rgamma(15000, shape = psi.volume, 
-                                 rate = psi.volume/(tau.volume[,p]*delta.volume[,i,j])) - D[i,j,p]
+                                 rate = psi.volume/(tau.volume[,p]*delta.volume[,i,j]))/D[i,j,p]
       }
     }
   }
@@ -386,14 +372,14 @@ for(i in 1:10){
   for(j in 1:10){
     if(j > i){
       for(p in 1:37){
-        if(q25[i,j,p] <0 & q975[i,j,p] > 0){
+        if(q25[i,j,p] <1 & q975[i,j,p] > 1){
           count <- count + 1
         }
       }
     }
   }
 }
-
+count/(45*37)
 ### Posterior pred for one pair across all pieces
 post.pred <- data.frame(y_star[,1,10,])
 colnames(post.pred) <- dimnames(hellinger.dist)[[3]]
@@ -404,29 +390,12 @@ plot.df$Symphony <- c(rep("No1", 15000*4), rep("No2", 15000*4), rep("No3", 15000
 
 ggplot(plot.df, aes(x = variable, y = value, fill = Symphony)) +
   geom_boxplot() + 
-  geom_hline(aes(yintercept = 0), color = 'navy') +
+  geom_hline(aes(yintercept = 1), color = 'navy') +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
-  labs(y = TeX("$\\e_{ijp}$"), x = "Piece") +
+  labs(y = TeX("$\\r_{ijp}$"), x = "Piece") +
   theme(text = element_text(size=16)) 
 
-## Posterior pred few pieces all pairs
-post.pred <- data.frame(y_star[,1,2:10,34])
-colnames(post.pred) <- dimnames(hellinger.dist)[[1]][2:10]
-ggplot(melt(post.pred), aes(x = variable, y = value, fill = variable)) +
-  geom_boxplot() + 
-  geom_hline(aes(yintercept = 0)) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
-  labs(y = TeX("$\\y^*_{ijp}$"), x = '') +
-  theme(legend.position = "none")
 
-post.pred <- data.frame(y_star[,1,2:10,1])
-colnames(post.pred) <- dimnames(hellinger.dist)[[1]][2:10]
-ggplot(melt(post.pred), aes(x = variable, y = value, fill = variable)) +
-  geom_boxplot() + 
-  geom_hline(aes(yintercept = 0)) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
-  labs(y = TeX("$\\y^*_{ijp}$"), x = '') +
-  theme(legend.position = "none")
 
 
 ## SF - Sampling Model
@@ -438,9 +407,9 @@ for(i in 1:10){
   for(j in 1:10){
     if(j > i){
       for(p in 1:37){
-        ## Subtract off obs data
+        ## Ratio to obs data
         y_star[,i,j,p] <- rgamma(15000, shape = psi.SF, 
-                                 rate = psi.SF/(tau.SF[,p]*delta.SF[,i,j])) - D[i,j,p]
+                                 rate = psi.SF/(tau.SF[,p]*delta.SF[,i,j]))/D[i,j,p]
       }
     }
   }
@@ -454,13 +423,16 @@ for(i in 1:10){
   for(j in 1:10){
     if(j > i){
       for(p in 1:37){
-        if(q25[i,j,p] <0 & q975[i,j,p] > 0){
+        if(q25[i,j,p] <1 & q975[i,j,p] > 1){
           count <- count + 1
         }
       }
     }
   }
 }
+
+## Coverage
+count/(45*37)
 
 ### Posterior pred for one pair across all pieces
 post.pred <- data.frame(y_star[,1,10,])
@@ -472,29 +444,12 @@ plot.df$Symphony <- c(rep("No1", 15000*4), rep("No2", 15000*4), rep("No3", 15000
 
 ggplot(plot.df, aes(x = variable, y = value, fill = Symphony)) +
   geom_boxplot() + 
-  geom_hline(aes(yintercept = 0), color = 'navy') +
+  geom_hline(aes(yintercept = 1), color = 'navy') +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
-  labs(y = TeX("$\\e_{ijp}$"), x = "Piece") +
+  labs(y = TeX("$\\r_{ijp}$"), x = "Piece") +
   theme(text = element_text(size=16)) 
 
-## Posterior pred few pieces all pairs
-post.pred <- data.frame(y_star[,1,2:10,34])
-colnames(post.pred) <- dimnames(hellinger.dist)[[1]][2:10]
-ggplot(melt(post.pred), aes(x = variable, y = value, fill = variable)) +
-  geom_boxplot() + 
-  geom_hline(aes(yintercept = 0)) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
-  labs(y = TeX("$\\y^*_{ijp}$"), x = '') +
-  theme(legend.position = "none")
 
-post.pred <- data.frame(y_star[,1,2:10,1])
-colnames(post.pred) <- dimnames(hellinger.dist)[[1]][2:10]
-ggplot(melt(post.pred), aes(x = variable, y = value, fill = variable)) +
-  geom_boxplot() + 
-  geom_hline(aes(yintercept = 0)) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
-  labs(y = TeX("$\\y^*_{ijp}$"), x = '') +
-  theme(legend.position = "none")
 
 #########################################
 ####### Evaluate Hierarchical Model ####
