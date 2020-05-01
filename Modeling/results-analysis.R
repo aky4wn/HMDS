@@ -515,11 +515,12 @@ colnames(vienna.volume) <- dimnames(hellinger.dist)[[1]][1:9]
 colnames(vienna.SF) <- dimnames(hellinger.dist)[[1]][1:9]
 
 vienna.tempo$Metric <- 'Tempo'
-vienna.volume$Metric <- 'Volume'
-vienna.SF$Metric <- 'SF'
+vienna.volume$Metric <- 'Dynamics'
+vienna.SF$Metric <- 'Timbre'
 
 vienna.df <- rbind(vienna.tempo, vienna.volume, vienna.SF)
-vienna.df$Metric <- factor(vienna.df$Metric, levels = c("Tempo", "Volume", "SF"))
+vienna.df$Metric <- factor(vienna.df$Metric, 
+                           levels = c("Tempo", "Dynamics", "Timbre"))
 ggplot(melt(vienna.df, id = "Metric"), aes(x = variable, y = value, fill = variable)) +
   geom_boxplot() +
   facet_wrap(~Metric, nrow = 1) +
