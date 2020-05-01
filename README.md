@@ -1,6 +1,6 @@
 # HMDS
 
-Accompanying code for *Hierarchical Multidimensional Scaling for the Comparison of Audio Recordings*.  
+Accompanying code for *Hierarchical Multidimensional Scaling for the Comparison of Audio Recordings*, https://arxiv.org/abs/2004.13870.  
 
 
 ## Modeling
